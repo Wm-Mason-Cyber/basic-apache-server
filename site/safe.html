@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Safe Demo — Search</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Safe Search Demo</h1>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/vulnerable.html">Vulnerable Demo</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>This page shows a safe way to reflect user input by using <code>textContent</code> and escaping HTML.</p>
+    <form action="/safe.html" method="get">
+      <input name="q" placeholder="search...">
+      <button type="submit">Search</button>
+    </form>
+
+    <div id="search-results"></div>
+
+    <script>
+      // Safe: read ?q= and insert using textContent so HTML isn't interpreted
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      const box = document.getElementById('search-results');
+      if (q) {
+        const header = document.createElement('p');
+        header.textContent = `Showing results for ${q}`;
+        const ul = document.createElement('ul');
+        const liA = document.createElement('li');
+        liA.textContent = `Result A for ${q}`;
+        const liB = document.createElement('li');
+        liB.textContent = `Result B for ${q}`;
+        ul.appendChild(liA);
+        ul.appendChild(liB);
+        box.appendChild(header);
+        box.appendChild(ul);
+      } else {
+        box.textContent = 'No query provided.';
+      }
+    </script>
+  </main>
+
+  <footer>
+    <small>This page demonstrates the safer alternative used in class exercises.</small>
+  </footer>
+</body>
+</html>

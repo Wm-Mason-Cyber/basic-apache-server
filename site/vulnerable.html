@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vulnerable Demo — Search</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header>
+    <h1>Vulnerable Search Demo</h1>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/safe.html">Safe Demo</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>Enter a search term. This page shows another example of reflected input being inserted without sanitization.</p>
+    <form action="/vulnerable.html" method="get">
+      <input name="q" placeholder="search...">
+      <button type="submit">Search</button>
+    </form>
+
+    <div id="search-results"></div>
+
+    <script>
+      // Read ?q= and show a fake "result" using innerHTML
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      const box = document.getElementById('search-results');
+      if (q) {
+        // Intentionally vulnerable: showing user input via innerHTML
+        box.innerHTML = `<p>Showing results for <em>${q}</em></p>` +
+                        `<ul><li>Result A for ${q}</li><li>Result B for ${q}</li></ul>`;
+      } else {
+        box.textContent = 'No query provided.';
+      }
+    </script>
+  </main>
+
+  <footer>
+    <small>Used in class to demonstrate XSS-style issues (client-side).</small>
+  </footer>
+</body>
+</html>

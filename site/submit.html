@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Message Received</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header>
+    <h1>Message received</h1>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/contact.html">Back to Contact</a>
+      <a href="/vulnerable.html">Vulnerable Demo</a>
+      <a href="/safe.html">Safe Demo</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>Below we display the values submitted by the form. This page intentionally demonstrates an unsafe way to insert user input into a page.</p>
+
+    <div id="result">
+      <!-- JavaScript will insert the submitted fields here UNSAFE on purpose -->
+    </div>
+
+    <script>
+      // Intentionally unsafe: using innerHTML with user-supplied data to show reflected XSS
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('name') || '(no name)';
+      const email = params.get('email') || '(no email)';
+      const message = params.get('message') || '(no message)';
+
+      const out = `
+        <h2>From: ${name}</h2>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <div>${message}</div>
+      `;
+
+      document.getElementById('result').innerHTML = out; // vulnerable on purpose
+    </script>
+
+  </main>
+
+  <footer>
+    <small>Displayed client-side for teaching only.</small>
+  </footer>
+</body>
+</html>

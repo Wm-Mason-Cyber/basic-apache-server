@@ -1,0 +1,9 @@
+/* Simple styling for the demo site */
+body { font-family: Arial, sans-serif; line-height: 1.4; margin: 0; padding: 0; background: #f9f9fb; color: #111; }
+header { background: #0a58ca; color: #fff; padding: 1rem; }
+header h1 { margin: 0 0 0.5rem 0; }
+nav a { color: #ffd; margin-right: 1rem; text-decoration: none; }
+main { padding: 1rem; }
+form input, form textarea { width: 95%; max-width: 400px; margin-top: 0.25rem; }
+footer { padding: 0.5rem 1rem; background: #eee; font-size: 0.9rem; }
+#search-results { margin-top: 1rem; background: #fff; padding: 0.5rem; border: 1px solid #ddd; }

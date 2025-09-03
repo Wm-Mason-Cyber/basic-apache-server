@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact — Basic Apache Server</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Contact Us (demo)</h1>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/vulnerable.html">Vulnerable Demo</a>
+      <a href="/safe.html">Safe Demo</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>Fill out the form below and we'll "display" your message on the next page. For the purposes of this demo the form uses <code>GET</code> so the submitted values are visible in the URL — this helps illustrate reflected input handling.</p>
+
+    <form action="/submit.html" method="get">
+      <label>
+        Name: <input name="name" required>
+      </label>
+      <br>
+      <label>
+        Email: <input name="email" type="email">
+      </label>
+      <br>
+      <label>
+        Message:<br>
+        <textarea name="message" rows="4" cols="40"></textarea>
+      </label>
+      <br>
+      <button type="submit">Send</button>
+    </form>
+
+    <section>
+      <h3>Teaching note</h3>
+      <p>This form intentionally demonstrates reflected input handling in a simple way (client-side). The documentation in <a href="/docs/vulnerabilities.md">docs/vulnerabilities.md</a> explains risks and mitigations.</p>
+    </section>
+  </main>
+
+  <footer>
+    <small>Local demo only.</small>
+  </footer>
+</body>
+</html>
