@@ -3,13 +3,6 @@
 
 A tiny, safe (but intentionally instructive) website served by Apache. This repo is designed for classroom use to demonstrate how static websites are served and to teach common web vulnerabilities in a controlled environment.
 
-## Quick links
-
-- Live demo (when running locally): http://localhost:8080
-- Student workbook: `STUDENT_WORKBOOK.md` (printable)
-- Docs: `docs/` — setup, structure, vulnerabilities, lesson plan
-
----
 
 ## Quick start
 
@@ -17,9 +10,31 @@ Build and run the demo using Docker (from the repository root):
 
 ```bash
 # build the Docker image
-docker build -t basic-apache-server .
+
 
 # run the site on localhost:8080
+# run the site on localhost:8080
+```
+
+Open http://localhost:8080 in your browser.
+
+See `docs/setup.md` for a live-mount example and additional teaching notes.
+
+---
+
+## Python test environment
+
+Automated tests use a Python virtual environment. To set up:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install selenium
+```
+
+The `.gitignore` excludes `venv/` and Python cache files.
+
+---
 docker run --rm -p 8080:80 basic-apache-server
 ```
 
@@ -79,6 +94,7 @@ This project intentionally includes small, benign insecure patterns so students 
 
 ---
 
+
 ## Student workbook (printable) 📘
 
 A printable student workbook is included at `STUDENT_WORKBOOK.md` and `docs/student-workbook.md`. It guides students through:
@@ -87,6 +103,14 @@ A printable student workbook is included at `STUDENT_WORKBOOK.md` and `docs/stud
 - demonstrating a reflected XSS payload in a safe, local environment
 - patching client-side code (safe example provided in `site/safe.html`)
 - discussion questions and follow-ups
+
+**XSS payload for classroom demo:**
+
+```
+<img src=x onerror="document.title='XSS-TRIGGERED'">
+```
+
+This payload is reliably detected by the automated test and works in all modern browsers.
 
 ---
 

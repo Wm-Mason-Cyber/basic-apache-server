@@ -24,16 +24,16 @@ Open http://localhost:8080 in your browser.
 - In `/contact.html` send a message containing this payload (ONLY on your local instance):
 
 ```
-<script>alert('xss')</script>
+<img src=x onerror="document.title='XSS-TRIGGERED'">
 ```
 
-- Observe whether an alert executes on the `submit.html` page.
+- Observe whether the page title changes to `XSS-TRIGGERED` on the `submit.html` page.
 
 ## Patch the code (client-side safe fix)
 - Open `site/submit.html` in a text editor. Find the place where the page sets `innerHTML` with user-supplied content and change it to use `textContent` or create DOM nodes with `document.createElement` + `textContent`.
 
 ## Verify the fix
-- Reload `submit.html` with the same payload and confirm the alert no longer executes.
+- Reload `submit.html` with the same payload and confirm the page title does not change.
 
 ## Discussion questions
 - Why is it dangerous to insert unsanitized user input into a page?
@@ -41,5 +41,17 @@ Open http://localhost:8080 in your browser.
 - When would you still need additional escaping even if using `textContent`?
 
 ---
+
+---
+
+Automated tests use a Python virtual environment. To set up:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install selenium
+```
+
+The `.gitignore` excludes `venv/` and Python cache files.
 
 Safety reminder: Only test exploits on local or classroom networks you control.
