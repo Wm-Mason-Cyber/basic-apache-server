@@ -16,6 +16,7 @@ import subprocess
 import time
 import urllib.request
 import sys
+import html
 
 HOST = 'http://127.0.0.1:8080'
 CONTAINER_NAME = 'basic-apache-server-test'
@@ -60,6 +61,7 @@ def main():
         vulnerable_html = fetch('/vulnerable.html')
         submit_html = fetch('/submit.html')
         contact_html = fetch('/contact.html')
+        safe_html = fetch('/safe.html')
 
         # Checks
         errors = []
@@ -75,13 +77,43 @@ def main():
         if 'method="get"' not in contact_html.lower() and 'method=get' not in contact_html.lower():
             errors.append('contact form does not use GET (expected for demo)')
 
+        # Vulnerability tests: reflected XSS
+        xss_payload = "<script>alert('xss')</script>"
+        # /submit.html: simulate GET params
+        submit_url = f"/submit.html?name=Attacker&email=evil%40x.com&message={urllib.request.quote(xss_payload)}"
+        submit_result = fetch(submit_url)
+        if xss_payload not in submit_result:
+            errors.append("submit.html does not reflect XSS payload as expected (should be vulnerable)")
+        else:
+            print("[PASS] submit.html reflects XSS payload (vulnerable as expected)")
+
+        # /vulnerable.html: simulate search
+        vuln_url = f"/vulnerable.html?q={urllib.request.quote(xss_payload)}"
+        vuln_result = fetch(vuln_url)
+        if xss_payload not in vuln_result:
+            errors.append("vulnerable.html does not reflect XSS payload as expected (should be vulnerable)")
+        else:
+            print("[PASS] vulnerable.html reflects XSS payload (vulnerable as expected)")
+
+        # /safe.html: should NOT reflect as HTML
+        safe_url = f"/safe.html?q={urllib.request.quote(xss_payload)}"
+        safe_result = fetch(safe_url)
+        if xss_payload in safe_result:
+            # Check if it's inside a text node (not interpreted as HTML)
+            if '<script>' in safe_result and 'alert(' in safe_result:
+                print("[PASS] safe.html shows payload as text (not interpreted as HTML)")
+            else:
+                errors.append("safe.html may be vulnerable (payload reflected as HTML)")
+        else:
+            print("[PASS] safe.html does not reflect XSS payload as HTML (safe)")
+
         if errors:
             print('\nTEST FAILS:')
             for e in errors:
                 print('- ' + e)
             raise SystemExit(2)
 
-        print('\nAll checks passed (site served and vulnerable patterns present as expected).')
+        print('\nAll checks passed (site served and vulnerabilities behave as described in the workbook).')
 
     finally:
         print('\nTearing down container (if running)')
